@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, FlatList, Text, View, StyleSheet } from 'react-native';
+import { API_URL } from '@env';
 
 const App = () => {
     const [isLoading, setLoading] = useState(true);
@@ -7,7 +8,7 @@ const App = () => {
 
     const getUsuarios = async () => {
         try {
-            const response = await fetch('http://192.168.0.3:8080/usuarios/all'); // Usa la IP de tu máquina
+            const response = await fetch(`${API_URL}/usuarios/all`);
             const json = await response.json();
             console.log('Datos obtenidos:', json); // Verificar los datos obtenidos
             // Filtrar datos incompletos
