@@ -1,47 +1,50 @@
-// src/styles/PersonajeScreenStyles.js
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        flexGrow: 1,
-        alignItems: 'center',
+        flex: 1,
+        padding: 20,
         backgroundColor: '#f5f5f5',
-        paddingTop: 20,
     },
     image: {
-        width: 150,
-        height: 150,
+        width: 200,
+        height: 200,
         marginBottom: 20,
+        alignSelf: 'center',
     },
     heartsContainer: {
         flexDirection: 'row',
-        marginBottom: 10,
-    },
-    heartIcon: {
-        width: 30,
-        height: 30,
-        backgroundColor: 'red',
-        borderRadius: 15,
-        marginRight: 10,
-    },
-    text: {
-        textAlign: 'center',
-        paddingHorizontal: 20,
+        justifyContent: 'center',
         marginBottom: 20,
     },
+    text: {
+        fontSize: 18,
+        marginBottom: 20,
+        textAlign: 'center',
+        userSelect: 'none', // Esto evitará la selección del texto en web
+    },
     cardContainer: {
-        width: '80%',
-        height: 150,
+        width: 300,
+        height: 200,
+        justifyContent: 'center',
+        alignItems: 'center',
         borderRadius: 10,
         marginBottom: 20,
     },
+    cardText: {
+        fontSize: 18,
+        color: '#fff',
+        userSelect: 'none', // Esto evitará la selección del texto en web
+    },
     placeName: {
-        fontSize: 20,
+        fontSize: 22,
+        fontWeight: 'bold',
+        textAlign: 'center',
         marginBottom: 10,
     },
     date: {
-        fontSize: 16,
-        color: '#888',
+        fontSize: 20,
+        textAlign: 'center',
     },
 });
 

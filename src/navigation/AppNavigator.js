@@ -12,10 +12,9 @@ import LearnMoreScreen from '../screens/LearnMoreScreen';
 import HelpScreen from '../screens/HelpScreen';
 import LoginRegisterScreen from '../screens/LoginRegisterScreen';
 import Personaje1Screen from '../screens/Personaje1Screen';
-import Personaje2Screen from '../screens/Personaje2Screen';
-import Personaje3Screen from '../screens/Personaje3Screen';
+
 import AdminScreen from '../screens/AdminScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { View, ActivityIndicator } from 'react-native';
 
 const Stack = createStackNavigator();
@@ -60,8 +59,6 @@ function AppNavigator() {
                 <Stack.Screen name="Help" component={HelpScreen} />
                 <Stack.Screen name="Admin" component={AdminScreen} />
                 <Stack.Screen name="Personaje1" component={Personaje1Screen} />
-                <Stack.Screen name="Personaje2" component={Personaje2Screen} />
-                <Stack.Screen name="Personaje3" component={Personaje3Screen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
