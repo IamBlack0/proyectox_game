@@ -21,11 +21,18 @@
       },
       "permissions": [
         "INTERNET",
-        "ACCESS_NETWORK_STATE"
+        "ACCESS_NETWORK_STATE",
+        "READ_EXTERNAL_STORAGE"
       ]
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "fonts": {
+        "AllertaStencil": "https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap"
+      }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
