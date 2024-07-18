@@ -3,7 +3,7 @@ import { View, Text, Image, Animated, PanResponder, Platform } from 'react-nativ
 import styles from '../styles/PersonajeScreenStyles';
 import { FontAwesome } from '@expo/vector-icons';
 
-const Personaje1Screen = () => {
+const PersonajeScreen = () => {
     const [cardColor, setCardColor] = useState(getRandomColor());
 
     const pan = useState(new Animated.ValueXY())[0];
@@ -62,4 +62,4 @@ const getRandomColor = () => {
     return colors[Math.floor(Math.random() * colors.length)];
 };
 
-export default Personaje1Screen;
+export default PersonajeScreen;

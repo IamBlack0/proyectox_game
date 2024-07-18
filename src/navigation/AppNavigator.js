@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from '@react-navigation/native';
+import { View, ActivityIndicator } from 'react-native'; // Asegúrate de importar View y ActivityIndicator
 import HomeScreen from '../screens/HomeScreen';
 import LoginScreen from '../screens/LoginScreen';
 import RegisterScreen from '../screens/RegisterScreen';
@@ -11,11 +12,12 @@ import ProfileScreen from '../screens/ProfileScreen';
 import LearnMoreScreen from '../screens/LearnMoreScreen';
 import HelpScreen from '../screens/HelpScreen';
 import LoginRegisterScreen from '../screens/LoginRegisterScreen';
-import Personaje1Screen from '../screens/Personaje1Screen';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import AdminScreen from '../screens/AdminScreen';
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { View, ActivityIndicator } from 'react-native';
+import PersonajeScreen from '../screens/PersonajeScreen';
+import IntroduccionScreen from '../screens/IntroduccionScreen';
+import ModificarUsuariosScreen from '../screens/ModificarUsuariosScreen';
+import ModificarDatosJuegoScreen from '../screens/ModificarDatosJuegoScreen';
 
 const Stack = createStackNavigator();
 
@@ -58,7 +60,10 @@ function AppNavigator() {
                 <Stack.Screen name="LearnMore" component={LearnMoreScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="Help" component={HelpScreen} />
                 <Stack.Screen name="Admin" component={AdminScreen} />
-                <Stack.Screen name="Personaje1" component={Personaje1Screen} />
+                <Stack.Screen name="Personaje" component={PersonajeScreen} />
+                <Stack.Screen name="Introduccion" component={IntroduccionScreen} />
+                <Stack.Screen name="ModificarUsuarios" component={ModificarUsuariosScreen} />
+                <Stack.Screen name="ModificarDatosJuego" component={ModificarDatosJuegoScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );

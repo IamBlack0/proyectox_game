@@ -4,7 +4,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: 20
     },
     profileImage: {
         width: 100,
@@ -26,6 +27,14 @@ const styles = StyleSheet.create({
     buttonText: {
         color: '#fff',
         fontSize: 16
+    },
+    input: {
+        height: 40,
+        borderColor: 'gray',
+        borderWidth: 1,
+        marginBottom: 20,
+        width: '100%',
+        paddingHorizontal: 10
     }
 });
 

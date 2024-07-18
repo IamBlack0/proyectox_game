@@ -1,13 +1,14 @@
-// src/screens/PlayScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal, Platform, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 import styles from '../styles/PlayScreenStyles';
 
-function PlayScreen({ navigation }) {
+function PlayScreen() {
     const [selectedOption, setSelectedOption] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [personajes, setPersonajes] = useState([]);
+    const navigation = useNavigation();
 
     useEffect(() => {
         fetchPersonajes();
@@ -29,20 +30,16 @@ function PlayScreen({ navigation }) {
 
     const handleOptionPress = (option) => {
         setSelectedOption(option);
-        if (Platform.OS === 'web') {
-            setModalVisible(false);
-        } else {
+        if (Platform.OS !== 'web') {
             setModalVisible(true);
         }
     };
 
     const handleStartPress = () => {
-        if (selectedOption.id_personaje === 1) {
-            navigation.navigate('Personaje1');
-        } else if (selectedOption.id_personaje === 2) {
-            navigation.navigate('Personaje2');
-        } else if (selectedOption.id_personaje === 3) {
-            navigation.navigate('Personaje3');
+        if (selectedOption) {
+            navigation.navigate('Introduccion', { personajeId: selectedOption.id_personaje });
+        } else {
+            console.error('No se ha seleccionado ningún personaje.');
         }
     };
 

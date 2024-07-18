@@ -1,5 +1,4 @@
 // src/styles/AdminScreenStyles.js
-
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -20,7 +19,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         marginBottom: 20,
     },
-    // Agrega más estilos según sea necesario para otros componentes en la pantalla de administrador
+    button: {
+        backgroundColor: '#4CAF50', // Color verde para los botones
+        padding: 10,
+        borderRadius: 5,
+        marginVertical: 10,
+    },
+    buttonText: {
+        color: '#fff',
+        fontSize: 16,
+    }
 });
 
 export default styles;

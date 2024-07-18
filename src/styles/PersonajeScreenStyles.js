@@ -6,6 +6,16 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#f5f5f5',
     },
+    loadingContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    errorContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     image: {
         width: 200,
         height: 200,
@@ -21,7 +31,6 @@ const styles = StyleSheet.create({
         fontSize: 18,
         marginBottom: 20,
         textAlign: 'center',
-        userSelect: 'none', // Esto evitará la selección del texto en web
     },
     cardContainer: {
         width: 300,
@@ -30,11 +39,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 10,
         marginBottom: 20,
-    },
-    cardText: {
-        fontSize: 18,
-        color: '#fff',
-        userSelect: 'none', // Esto evitará la selección del texto en web
     },
     placeName: {
         fontSize: 22,
