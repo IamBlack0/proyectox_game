@@ -10,6 +10,7 @@ function PlayScreen() {
     const [personajes, setPersonajes] = useState([]);
     const navigation = useNavigation();
 
+    const backgroundImage = 'https://i.postimg.cc/qvTr9PMZ/images-pixelicious.png';
     useEffect(() => {
         fetchPersonajes();
     }, []);
@@ -43,6 +44,7 @@ function PlayScreen() {
         }
     };
 
+
     const renderContent = () => {
         if (!selectedOption) return null;
 
@@ -55,9 +57,8 @@ function PlayScreen() {
                         style={styles.image}
                     />
                     <View style={styles.detailsContainer}>
-                        <Text style={styles.detailText}>Personaje: {selectedOption.personaje}</Text>
-                        <Text style={styles.detailText}>Fecha: {selectedOption.fecha_personaje}</Text>
-                        <Text style={styles.detailText}>Lugar: {selectedOption.lugar_personaje}</Text>
+                        <Text style={styles.detailText}>{selectedOption.fecha_personaje}</Text>
+                        <Text style={styles.detailText}>{selectedOption.lugar_personaje}</Text>
                     </View>
                 </View>
                 <TouchableOpacity style={styles.startButton} onPress={handleStartPress}>

@@ -159,6 +159,9 @@ const styles = StyleSheet.create({
     closeButtonText: {
         color: '#fff',
     },
+    audioButton: {
+        marginTop: Platform.OS === 'web' ? 10 : 10,
+    },
 });
 
 export default styles;

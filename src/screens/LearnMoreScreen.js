@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Modal, Platform, ScrollView, Image, ImageBackground } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, Platform, ScrollView, Image, ImageBackground, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { Audio } from 'expo-av';
+import { useFocusEffect } from '@react-navigation/native';
 import styles from '../styles/LearnMoreScreenStyles';
 
 const backgroundImage = 'https://i.postimg.cc/qvTr9PMZ/images-pixelicious.png';
@@ -9,9 +11,29 @@ function LearnMoreScreen({ navigation }) {
     const [selectedOption, setSelectedOption] = useState(null);
     const [modalVisible, setModalVisible] = useState(false);
     const [personajes, setPersonajes] = useState([]);
+    const [sound, setSound] = useState();
+    const [isPlaying, setIsPlaying] = useState(false);
+
+    useFocusEffect(
+        React.useCallback(() => {
+            // Detener el sonido al salir de la pantalla
+            return () => {
+                if (sound) {
+                    sound.stopAsync();
+                    sound.unloadAsync();
+                    setIsPlaying(false);
+                }
+            };
+        }, [sound])
+    );
 
     useEffect(() => {
         fetchPersonajes();
+        return () => {
+            if (sound) {
+                sound.unloadAsync();
+            }
+        };
     }, []);
 
     const fetchPersonajes = async () => {
@@ -29,11 +51,33 @@ function LearnMoreScreen({ navigation }) {
     };
 
     const handleOptionPress = (option) => {
+        if (selectedOption && sound) {
+            sound.stopAsync();
+            setIsPlaying(false);
+        }
         setSelectedOption(option);
         if (Platform.OS === 'web') {
             setModalVisible(false);
         } else {
             setModalVisible(true);
+        }
+    };
+
+    const handleAudioPress = async () => {
+        if (isPlaying) {
+            await sound.stopAsync();
+            setIsPlaying(false);
+        } else {
+            if (sound) {
+                await sound.stopAsync();
+                setIsPlaying(false);
+            }
+            const { sound: newSound } = await Audio.Sound.createAsync(
+                { uri: selectedOption.audio_personaje }
+            );
+            setSound(newSound);
+            newSound.playAsync();
+            setIsPlaying(true);
         }
     };
 
@@ -52,6 +96,9 @@ function LearnMoreScreen({ navigation }) {
                             />
                             <Text style={styles.detailText}>{selectedOption.fecha_personaje}</Text>
                             <Text style={styles.detailText}>{selectedOption.lugar_personaje}</Text>
+                            <TouchableOpacity onPress={handleAudioPress} style={styles.audioButton}>
+                                <Icon name={isPlaying ? "stop" : "play"} size={30} color="#000" />
+                            </TouchableOpacity>
                         </View>
                         <View style={styles.rightContainer}>
                             <ScrollView style={styles.textScroll}>
@@ -72,6 +119,9 @@ function LearnMoreScreen({ navigation }) {
                             <View style={styles.detailsContainer}>
                                 <Text style={styles.detailText}>{selectedOption.fecha_personaje}</Text>
                                 <Text style={styles.detailText}>{selectedOption.lugar_personaje}</Text>
+                                <TouchableOpacity onPress={handleAudioPress} style={styles.audioButton}>
+                                    <Icon name={isPlaying ? "stop" : "play"} size={30} color="#000" />
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <ScrollView style={styles.textScroll}>
