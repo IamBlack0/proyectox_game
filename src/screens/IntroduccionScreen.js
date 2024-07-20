@@ -16,7 +16,7 @@ const IntroduccionScreen = () => {
 
     const fetchVideoData = async (personajeId, plataforma) => {
         try {
-            const response = await fetch(`http://192.168.0.4:8080/personajes/${personajeId}/videos/${plataforma}`);
+            const response = await fetch(`http://172.31.160.1:8080/personajes/${personajeId}/videos/${plataforma}`);
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {

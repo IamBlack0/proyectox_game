@@ -10,6 +10,7 @@ import {
     ScrollView,
     CheckBox,
 } from 'react-native';
+import Constants from 'expo-constants'; // Importar expo-constants
 import styles from '../styles/ModificarUsuariosStyles';
 
 const ModificarUsuariosScreen = ({ navigation }) => {
@@ -19,7 +20,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
     const [formData, setFormData] = useState({ nombre_usuario: '', correo_usuario: '', contra_usuario: '', rol_usuario: '', img_usuario: '' });
 
     useEffect(() => {
-        fetch('http://192.168.50.177:8080/usuarios')
+        fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios`) // Usa la URL de la variable de entorno
             .then(response => response.json())
             .then(data => setUsuarios(data))
             .catch(error => console.error('Error fetching usuarios:', error));
@@ -37,7 +38,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
     };
 
     const handleSave = () => {
-        fetch(`http://192.168.0.4:8080/usuarios/${editingUserId}`, {
+        fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/${editingUserId}`, { // Usa la URL de la variable de entorno
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +52,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                     setEditingUserId(null);
                     setFormData({ nombre_usuario: '', correo_usuario: '', contra_usuario: '', rol_usuario: '', img_usuario: '' });
                     // Refetch usuarios
-                    fetch('http://192.168.50.177:8080/usuarios')
+                    fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios`) // Usa la URL de la variable de entorno
                         .then(response => response.json())
                         .then(data => setUsuarios(data))
                         .catch(error => console.error('Error fetching usuarios:', error));
@@ -65,9 +66,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
     const handleDelete = () => {
         if (selectedIds.length === 0) {
             Alert.alert('No hay usuarios seleccionados');
-        }
-
-        else{
+        } else {
             Alert.alert(
                 'Confirmación',
                 '¿Estás seguro de que quieres eliminar los usuarios seleccionados?',
@@ -75,7 +74,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                     { text: 'Cancelar', style: 'cancel' },
                     {
                         text: 'Eliminar', onPress: () => {
-                            fetch('http://192.168.0.4:8080/usuarios/', {
+                            fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/`, { // Usa la URL de la variable de entorno
                                 method: 'DELETE',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -88,7 +87,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                                         alert(data.mensaje);  // Mostrar mensaje de éxito o error del backend
                                         setSelectedIds([]);
                                         // Refetch usuarios
-                                        fetch('http://192.168.0.4:8080/usuarios')
+                                        fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios`) // Usa la URL de la variable de entorno
                                             .then(response => response.json())
                                             .then(data => setUsuarios(data))
                                             .catch(error => console.error('Error fetching usuarios:', error));
@@ -129,8 +128,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
             <CheckBox
                 style={styles.checkboxStyle}
                 value={selectedIds.includes(item.id_usuario)}
-                onValueChange={() => handleSelectRow(item.id_usuario)
-            }
+                onValueChange={() => handleSelectRow(item.id_usuario)}
             />
             <Text style={styles.tableCell}>{item.nombre_usuario}</Text>
             <Text style={styles.tableCell}>{item.correo_usuario}</Text>
@@ -197,10 +195,10 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                     <View style={styles.button}>
                         <Button title="Guardar" onPress={handleSave} />
                     </View>
-                </View>)}
+                </View>
+            )}
         </View>
     );
 };
-
 
 export default ModificarUsuariosScreen;

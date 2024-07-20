@@ -1,8 +1,7 @@
-// src/screens/LoginScreen.js
-
 import React, { useState } from 'react';
 import { View, TextInput, Text, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants'; // Importar expo-constants
 import styles from '../styles/LoginScreenStyles';
 
 const LoginScreen = ({ navigation }) => {
@@ -12,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch('http://192.168.0.4:8080/usuarios/login', {
+            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/login`, { // Usa la URL de la variable de entorno
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -26,7 +25,6 @@ const LoginScreen = ({ navigation }) => {
             const result = await response.json();
 
             if (response.ok) {
-                // Guarda el usuario en AsyncStorage
                 // Guarda el usuario en AsyncStorage
                 await AsyncStorage.setItem('user', JSON.stringify(result));
                 console.log('Usuario almacenado en AsyncStorage:', result);

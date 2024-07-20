@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Modal, Platform, StyleSheet, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
+import Constants from 'expo-constants'; // Importar expo-constants
 import styles from '../styles/PlayScreenStyles';
 
 function PlayScreen() {
@@ -17,7 +18,7 @@ function PlayScreen() {
 
     const fetchPersonajes = async () => {
         try {
-            const response = await fetch('http://192.168.0.4:8080/personajes/all');
+            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/personajes/all`); // Usar la URL de la variable de entorno
             if (response.ok) {
                 const data = await response.json();
                 setPersonajes(data);
@@ -43,7 +44,6 @@ function PlayScreen() {
             console.error('No se ha seleccionado ningún personaje.');
         }
     };
-
 
     const renderContent = () => {
         if (!selectedOption) return null;

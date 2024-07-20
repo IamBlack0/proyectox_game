@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, Alert, Platform } from 'react-native';
+import Constants from 'expo-constants'; // Importar expo-constants
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/ProfileScreenStyles';
 
@@ -29,7 +30,7 @@ function ProfileScreen({ navigation }) {
     const handleUpdateImage = async () => {
         try {
             const user = JSON.parse(await AsyncStorage.getItem('user'));
-            const response = await fetch(`http://192.168.0.4:8080/usuarios/${user.id_usuario}/imagen`, {
+            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/${user.id_usuario}/imagen`, { // Usa la URL de la variable de entorno
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

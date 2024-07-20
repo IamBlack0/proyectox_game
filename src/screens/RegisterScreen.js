@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Text, Alert, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Constants from 'expo-constants'; // Importar expo-constants
 import styles from '../styles/RegisterScreenStyles';
 
 const RegisterScreen = ({ navigation }) => {
@@ -24,7 +25,7 @@ const RegisterScreen = ({ navigation }) => {
         }
 
         try {
-            const response = await fetch('http://192.168.0.4:8080/usuarios/registrar', {
+            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/registrar`, { // Usa la URL de la variable de entorno
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

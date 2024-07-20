@@ -35,6 +35,9 @@
     },
     "plugins": [
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "apiUrl": "http://172.31.160.1:8080"
+    }
   }
 }

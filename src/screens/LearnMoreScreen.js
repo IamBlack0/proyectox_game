@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, Modal, Platform, ScrollView, Image, ImageBackground, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, Platform, ScrollView, Image, ImageBackground } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Audio } from 'expo-av';
 import { useFocusEffect } from '@react-navigation/native';
+import Constants from 'expo-constants'; // Importar expo-constants
 import styles from '../styles/LearnMoreScreenStyles';
 
 const backgroundImage = 'https://i.postimg.cc/qvTr9PMZ/images-pixelicious.png';
@@ -38,7 +39,7 @@ function LearnMoreScreen({ navigation }) {
 
     const fetchPersonajes = async () => {
         try {
-            const response = await fetch('http://192.168.0.4:8080/personajes/all');
+            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/personajes/all`); // Usa la URL de la variable de entorno
             if (response.ok) {
                 const data = await response.json();
                 setPersonajes(data);
