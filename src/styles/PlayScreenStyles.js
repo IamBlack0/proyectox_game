@@ -23,15 +23,20 @@ const styles = StyleSheet.create({
         alignItems: Platform.OS === 'web' ? 'flex-start' : 'center',
     },
     button: {
-        backgroundColor: '#007bff',
-        padding: Platform.OS === 'web' ? 20 : 10, // Aumentado para web
+        backgroundColor: '#ececed',
+        padding: Platform.OS === 'web' ? 20 : 15,
         marginBottom: 10,
+        borderWidth: 2,
+        borderColor: '#000',
         borderRadius: 5,
-        minWidth: Platform.OS === 'web' ? 470 : 'auto', // Añadido para web
+        width: Platform.OS === 'web' ? 'calc(100% - 40px)' : '80%',
     },
     buttonText: {
-        color: '#fff',
-        fontSize: Platform.OS === 'web' ? 24 : 16, // Aumentado para web
+        color: '#000000',
+        textAlign: 'center',
+        fontWeight: 'bold',
+        fontSize: Platform.OS === 'web' ? 30 : 18,
+        fontFamily: Platform.OS === 'web' ? 'AllertaStencil_400Regularv' : 'AllertaStencil_400Regular',
     },
     textContainer: {
         flex: 2,
@@ -41,11 +46,11 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
     },
     optionTitle: {
-        fontSize: Platform.OS === 'web' ? 28 : 22, // Aumentado para web
+        fontSize: Platform.OS === 'web' ? 40 : 20,
         fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: Platform.OS === 'web' ? 'left' : 'center',
-        alignSelf: Platform.OS === 'web' ? 'flex-start' : 'center',
+        marginBottom: Platform.OS === 'web' ? 20 : 10,
+        padding: 10,
+        fontFamily: Platform.OS === 'web' ? 'AllertaStencil_400Regular' : 'AllertaStencil_400Regular',
     },
     contentContainer: {
         flexDirection: Platform.OS === 'web' ? 'row' : 'column',
@@ -64,19 +69,24 @@ const styles = StyleSheet.create({
         paddingLeft: Platform.OS === 'web' ? 20 : 0, // Añadido padding para web
     },
     detailText: {
-        fontSize: Platform.OS === 'web' ? 50 : 16, // Aumentado para web
-        marginBottom: Platform.OS === 'web' ? 20 : 5, // Aumentado para web
+        paddingTop: 10,
+        fontSize: Platform.OS === 'web' ? 30 : 16,
+        marginBottom: 5,
+        fontFamily: Platform.OS === 'web' ? 'CourierPrime_400Regular' : 'CourierPrime_400Regular',
     },
     startButton: {
-        backgroundColor: '#007bff',
+        backgroundColor: 'rgba(0,123,255,0)',
         padding: Platform.OS === 'web' ? 20 : 10, // Aumentado para web
         borderRadius: 5,
         marginTop: 20,
+        borderWidth: 2,
+        borderColor: '#000',
         // Eliminar alignSelf para estirar el botón
     },
     startButtonText: {
-        color: '#fff',
+        color: '#000000',
         fontSize: Platform.OS === 'web' ? 24 : 16, // Aumentado para web
+        fontFamily: Platform.OS === 'web' ? 'CourierPrime_400Regular' : 'CourierPrime_400Regular',
     },
     modalContainer: {
         flex: 1,
