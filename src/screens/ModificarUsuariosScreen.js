@@ -1,15 +1,25 @@
-// src/screens/ModificarUsuariosScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TextInput, TouchableOpacity, StyleSheet, Button, CheckBox, Alert } from 'react-native';
+import {
+    View,
+    Text,
+    TextInput,
+    TouchableOpacity,
+    StyleSheet,
+    Button,
+    Alert,
+    ScrollView,
+    CheckBox,
+} from 'react-native';
+import styles from '../styles/ModificarUsuariosStyles';
 
 const ModificarUsuariosScreen = ({ navigation }) => {
     const [usuarios, setUsuarios] = useState([]);
     const [editingUserId, setEditingUserId] = useState(null);
     const [selectedIds, setSelectedIds] = useState([]);
-    const [formData, setFormData] = useState({ nombre_usuario: '', correo_usuario: '', contra_usuario: '', rol_usuario: '' });
+    const [formData, setFormData] = useState({ nombre_usuario: '', correo_usuario: '', contra_usuario: '', rol_usuario: '', img_usuario: '' });
 
     useEffect(() => {
-        fetch('http://192.168.0.4:8080/usuarios')
+        fetch('http://192.168.50.177:8080/usuarios')
             .then(response => response.json())
             .then(data => setUsuarios(data))
             .catch(error => console.error('Error fetching usuarios:', error));
@@ -21,6 +31,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
             nombre_usuario: usuario.nombre_usuario,
             correo_usuario: usuario.correo_usuario,
             contra_usuario: usuario.contra_usuario,
+            img_usuario: usuario.img_usuario,
             rol_usuario: usuario.rol_usuario.toString(),
         });
     };
@@ -38,9 +49,9 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                 if (data.mensaje) {
                     alert(data.mensaje);  // Mostrar mensaje de éxito o error del backend
                     setEditingUserId(null);
-                    setFormData({ nombre_usuario: '', correo_usuario: '', contra_usuario: '', rol_usuario: '' });
+                    setFormData({ nombre_usuario: '', correo_usuario: '', contra_usuario: '', rol_usuario: '', img_usuario: '' });
                     // Refetch usuarios
-                    fetch('http://192.168.0.4:8080/usuarios')
+                    fetch('http://192.168.50.177:8080/usuarios')
                         .then(response => response.json())
                         .then(data => setUsuarios(data))
                         .catch(error => console.error('Error fetching usuarios:', error));
@@ -54,40 +65,43 @@ const ModificarUsuariosScreen = ({ navigation }) => {
     const handleDelete = () => {
         if (selectedIds.length === 0) {
             Alert.alert('No hay usuarios seleccionados');
-            return;
         }
 
-        Alert.alert(
-            'Confirmación',
-            '¿Estás seguro de que quieres eliminar los usuarios seleccionados?',
-            [
-                { text: 'Cancelar', style: 'cancel' },
-                { text: 'Eliminar', onPress: () => {
-                        fetch('http://192.168.0.4:8080/usuarios/eliminar', {
-                            method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify({ ids: selectedIds }),
-                        })
-                            .then(response => response.json())
-                            .then(data => {
-                                if (data.mensaje) {
-                                    alert(data.mensaje);  // Mostrar mensaje de éxito o error del backend
-                                    setSelectedIds([]);
-                                    // Refetch usuarios
-                                    fetch('http://192.168.0.4:8080/usuarios')
-                                        .then(response => response.json())
-                                        .then(data => setUsuarios(data))
-                                        .catch(error => console.error('Error fetching usuarios:', error));
-                                } else {
-                                    alert('Error eliminando usuarios');
-                                }
+        else{
+            Alert.alert(
+                'Confirmación',
+                '¿Estás seguro de que quieres eliminar los usuarios seleccionados?',
+                [
+                    { text: 'Cancelar', style: 'cancel' },
+                    {
+                        text: 'Eliminar', onPress: () => {
+                            fetch('http://192.168.0.4:8080/usuarios/', {
+                                method: 'DELETE',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify({ ids: selectedIds }),
                             })
-                            .catch(error => console.error('Error deleting usuarios:', error));
-                    } },
-            ]
-        );
+                                .then(response => response.json())
+                                .then(data => {
+                                    if (data.mensaje) {
+                                        alert(data.mensaje);  // Mostrar mensaje de éxito o error del backend
+                                        setSelectedIds([]);
+                                        // Refetch usuarios
+                                        fetch('http://192.168.0.4:8080/usuarios')
+                                            .then(response => response.json())
+                                            .then(data => setUsuarios(data))
+                                            .catch(error => console.error('Error fetching usuarios:', error));
+                                    } else {
+                                        alert('Error eliminando usuarios');
+                                    }
+                                })
+                                .catch(error => console.error('Error deleting usuarios:', error));
+                        }
+                    },
+                ]
+            );
+        }
     };
 
     const handleSelectAll = (isSelected) => {
@@ -100,13 +114,29 @@ const ModificarUsuariosScreen = ({ navigation }) => {
         );
     };
 
-    const renderItem = ({ item }) => (
-        <View style={[styles.userItem, editingUserId === item.id_usuario && styles.editing]}>
+    const renderTableHeader = () => (
+        <View style={styles.tableRow}>
+            <Text style={[styles.headerCell]}>Nombre</Text>
+            <Text style={[styles.headerCell]}>Correo</Text>
+            <Text style={[styles.headerCell]}>Contraseña</Text>
+            <Text style={[styles.headerCell]}>Rol</Text>
+            <Text style={[styles.headerCell]}>Imagen</Text>
+        </View>
+    );
+
+    const renderTableRow = (item) => (
+        <View style={styles.tableRow} key={item.id_usuario}>
             <CheckBox
+                style={styles.checkboxStyle}
                 value={selectedIds.includes(item.id_usuario)}
-                onValueChange={() => handleSelectRow(item.id_usuario)}
+                onValueChange={() => handleSelectRow(item.id_usuario)
+            }
             />
-            <Text style={styles.userName}>{item.nombre_usuario}</Text>
+            <Text style={styles.tableCell}>{item.nombre_usuario}</Text>
+            <Text style={styles.tableCell}>{item.correo_usuario}</Text>
+            <Text style={styles.tableCell}>{item.contra_usuario}</Text>
+            <Text style={styles.tableCell}>{item.rol_usuario}</Text>
+            <Text style={styles.tableCell}>{item.img_usuario}</Text>
             <TouchableOpacity onPress={() => handleEdit(item)}>
                 <Text style={styles.editButton}>Editar</Text>
             </TouchableOpacity>
@@ -124,13 +154,15 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                 <Button title="Seleccionar Todos" onPress={() => handleSelectAll(true)} />
                 <Button title="Deseleccionar Todos" onPress={() => handleSelectAll(false)} />
             </View>
-            <FlatList
-                data={usuarios}
-                keyExtractor={(item) => item.id_usuario.toString()}
-                renderItem={renderItem}
-            />
+            <ScrollView style={styles.tableContainer}>
+                <View style={styles.table}>
+                    {renderTableHeader()}
+                    {usuarios.map(renderTableRow)}
+                </View>
+            </ScrollView>
             {editingUserId && (
                 <View style={styles.form}>
+                    <Text style={styles.text}>Espacio de modificación</Text>
                     <TextInput
                         placeholder="Nombre de usuario"
                         value={formData.nombre_usuario}
@@ -156,77 +188,19 @@ const ModificarUsuariosScreen = ({ navigation }) => {
                         keyboardType="numeric"
                         style={styles.input}
                     />
-                    <Button title="Guardar" onPress={handleSave} />
-                </View>
-            )}
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('Admin')}
-            >
-                <Text style={styles.buttonText}>Volver</Text>
-            </TouchableOpacity>
+                    <TextInput
+                        placeholder="Imagen"
+                        value={formData.img_usuario}
+                        onChangeText={(text) => setFormData({ ...formData, img_usuario: text })}
+                        style={styles.input}
+                    />
+                    <View style={styles.button}>
+                        <Button title="Guardar" onPress={handleSave} />
+                    </View>
+                </View>)}
         </View>
     );
 };
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        padding: 20,
-        backgroundColor: '#f0f0f0',
-    },
-    text: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 10,
-    },
-    description: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 20,
-    },
-    actions: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-    },
-    userItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    editing: {
-        borderColor: '#000',
-        borderWidth: 2,
-    },
-    userName: {
-        flex: 1,
-    },
-    editButton: {
-        color: 'blue',
-        marginLeft: 10,
-    },
-    form: {
-        marginTop: 20,
-    },
-    input: {
-        borderWidth: 1,
-        borderColor: '#ccc',
-        padding: 10,
-        marginBottom: 10,
-    },
-    button: {
-        backgroundColor: '#4CAF50',
-        padding: 10,
-        borderRadius: 5,
-        marginVertical: 10,
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16,
-    },
-});
 
 export default ModificarUsuariosScreen;
