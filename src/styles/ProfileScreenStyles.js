@@ -1,41 +1,65 @@
 import { StyleSheet } from 'react-native';
 
-const styles = StyleSheet.create({
+export default StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-        padding: 20
+        justifyContent: 'space-between',
+        padding: 20,
+    },
+    profileContainer: {
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        left: 0,
+        top: '50%',
+        transform: [{ translateY: -50 }],
     },
     profileImage: {
         width: 100,
         height: 100,
         borderRadius: 50,
-        marginBottom: 20
     },
     userName: {
-        fontSize: 24,
+        marginTop: 10,
+        fontSize: 18,
         fontWeight: 'bold',
-        marginBottom: 20
-    },
-    button: {
-        backgroundColor: '#ff4d4d',
-        padding: 10,
-        borderRadius: 5,
-        marginTop: 20
-    },
-    buttonText: {
-        color: '#fff',
-        fontSize: 16
+        textAlign: 'center',
     },
     input: {
-        height: 40,
-        borderColor: 'gray',
+        width: '80%',
+        padding: 10,
         borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        marginTop: 10,
+    },
+    updateButton: {
+        width: '50%',
+        padding: 10,
+        backgroundColor: 'black',
+        borderRadius: 5,
+        marginTop: 10,
+        alignItems: 'center',
+    },
+    logoutButton: {
+        width: '50%',
+        padding: 10,
+        backgroundColor: 'black',
+        borderRadius: 5,
         marginBottom: 20,
-        width: '100%',
-        paddingHorizontal: 10
-    }
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 20,
+    },
+    missionCompleted: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginTop: 20,
+    },
+    buttonText: {
+        color: 'white',
+        fontWeight: 'bold',
+    },
 });
-
-export default styles;

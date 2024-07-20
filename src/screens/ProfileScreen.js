@@ -1,13 +1,12 @@
-// src/screens/ProfileScreen.js
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, Image, TextInput, TouchableOpacity, Alert, Platform } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import styles from '../styles/ProfileScreenStyles';
 
 function ProfileScreen({ navigation }) {
     const [nombreUsuario, setNombreUsuario] = useState('');
-    const [imgUrl, setImgUrl] = useState(''); // Estado para la imagen de perfil
-    const [newImgUrl, setNewImgUrl] = useState(''); // Estado para la nueva URL de imagen
+    const [imgUrl, setImgUrl] = useState('');
+    const [newImgUrl, setNewImgUrl] = useState('');
 
     useEffect(() => {
         const obtenerDatosUsuario = async () => {
@@ -15,7 +14,7 @@ function ProfileScreen({ navigation }) {
             if (user) {
                 const { nombre_usuario, img_usuario } = JSON.parse(user);
                 setNombreUsuario(nombre_usuario);
-                setImgUrl(img_usuario || ''); // URL predeterminada eliminada
+                setImgUrl(img_usuario || '');
             }
         };
 
@@ -35,11 +34,10 @@ function ProfileScreen({ navigation }) {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ img_usuario: newImgUrl }), // Enviar como objeto JSON
+                body: JSON.stringify({ img_usuario: newImgUrl }),
             });
 
             if (response.ok) {
-                // Actualizar la URL en el almacenamiento local
                 const updatedUser = { ...user, img_usuario: newImgUrl };
                 await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
                 setImgUrl(newImgUrl);
@@ -54,21 +52,26 @@ function ProfileScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <Image
-                source={{ uri: imgUrl || 'https://cdnb.artstation.com/p/assets/images/images/056/671/665/large/nooarth-witchanimegirlblink.jpg?1669822411' }} // Usar la URL del perfil o una predeterminada
-                style={styles.profileImage}
-            />
-            <Text style={styles.userName}>{nombreUsuario}</Text>
-            <TextInput
-                placeholder="Nueva URL de la imagen"
-                value={newImgUrl}
-                onChangeText={setNewImgUrl}
-                style={styles.input}
-            />
-            <TouchableOpacity style={styles.button} onPress={handleUpdateImage}>
-                <Text style={styles.buttonText}>Actualizar Imagen</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.button} onPress={handleLogout}>
+            <View style={styles.profileContainer}>
+                <Image
+                    source={{ uri: imgUrl || 'https://cdnb.artstation.com/p/assets/images/images/056/671/665/large/nooarth-witchanimegirlblink.jpg?1669822411' }}
+                    style={styles.profileImage}
+                />
+                <Text style={styles.userName}>{nombreUsuario}</Text>
+                <TextInput
+                    placeholder="Nueva URL de la imagen"
+                    value={newImgUrl}
+                    onChangeText={setNewImgUrl}
+                    style={styles.input}
+                />
+                <TouchableOpacity style={styles.updateButton} onPress={handleUpdateImage}>
+                    <Text style={styles.buttonText}>Actualizar Imagen</Text>
+                </TouchableOpacity>
+            </View>
+            {Platform.OS === 'web' && (
+                <Text style={styles.missionCompleted}>Misión Completada</Text>
+            )}
+            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
                 <Text style={styles.buttonText}>Cerrar Sesión</Text>
             </TouchableOpacity>
         </View>

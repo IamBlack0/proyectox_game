@@ -29,7 +29,8 @@
     "web": {
       "favicon": "./assets/favicon.png",
       "fonts": {
-        "AllertaStencil": "https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap"
+        "AllertaStencil": "https://fonts.googleapis.com/css2?family=Allerta+Stencil&display=swap",
+        "CourierPrime": "https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap"
       }
     },
     "plugins": [
