@@ -1,54 +1,57 @@
+// Archivo PersonajeScreenStyles.js
+//prueba
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f5f5f5',
+        backgroundColor: '#fff',
     },
     loadingContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
+    image: {
+        width: '100%',
+        height: 200,
+        resizeMode: 'cover',
+        marginBottom: 20,
+    },
+    text: {
+        fontSize: 18,
+        marginVertical: 10,
+    },
     errorContainer: {
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
     },
-    image: {
-        width: 200,
-        height: 200,
-        marginBottom: 20,
-        alignSelf: 'center',
-    },
-    heartsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        marginBottom: 20,
-    },
-    text: {
-        fontSize: 18,
-        marginBottom: 20,
-        textAlign: 'center',
-    },
-    cardContainer: {
-        width: 300,
-        height: 200,
-        justifyContent: 'center',
+    button: {
+        padding: 15,
+        marginVertical: 5,
+        borderRadius: 5,
+        borderWidth: 1,
+        borderColor: '#ddd',
         alignItems: 'center',
-        borderRadius: 10,
-        marginBottom: 20,
     },
-    placeName: {
-        fontSize: 22,
-        fontWeight: 'bold',
-        textAlign: 'center',
-        marginBottom: 10,
+    buttonCorrect: {
+        backgroundColor: 'green',
     },
-    date: {
-        fontSize: 20,
-        textAlign: 'center',
+    buttonIncorrect: {
+        backgroundColor: 'red',
+    },
+    buttonText: {
+        color: 'white',
+        fontSize: 16,
+    },
+    audioButton: {
+        padding: 15,
+        marginVertical: 10,
+        borderRadius: 5,
+        backgroundColor: '#007BFF',
+        alignItems: 'center',
     },
 });
 
