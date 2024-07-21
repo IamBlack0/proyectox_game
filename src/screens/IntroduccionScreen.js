@@ -1,7 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { View, Text, StyleSheet, Platform, TouchableOpacity } from 'react-native';
+import { View, Text, Platform, TouchableOpacity, StyleSheet } from 'react-native';
 import { Video } from 'expo-av'; // Usando expo-av para reproducir video en Expo
 import { useNavigation, useRoute } from '@react-navigation/native';
+import Constants from 'expo-constants'; // Importar expo-constants
+import styles from '../styles/IntroduccionScreenStyles';
 
 const IntroduccionScreen = () => {
     const [videoUrl, setVideoUrl] = useState('');
@@ -16,7 +18,7 @@ const IntroduccionScreen = () => {
 
     const fetchVideoData = async (personajeId, plataforma) => {
         try {
-            const response = await fetch(`http://172.31.160.1:8080/personajes/${personajeId}/videos/${plataforma}`);
+            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/personajes/${personajeId}/videos/${plataforma}`); // Usa la URL de la variable de entorno
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {
@@ -46,7 +48,6 @@ const IntroduccionScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Introducción al Personaje</Text>
             {videoUrl ? (
                 <>
                     <Video
@@ -70,34 +71,5 @@ const IntroduccionScreen = () => {
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#fff',
-    },
-    title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-    },
-    video: {
-        flex: 1,
-        width: '100%',
-        height: Platform.OS === 'web' ? '100vh' : '100%',
-    },
-    skipButton: {
-        marginTop: 20,
-        padding: 10,
-        backgroundColor: '#007bff',
-        borderRadius: 5,
-    },
-    skipButtonText: {
-        color: '#fff',
-        fontSize: 16,
-    },
-});
 
 export default IntroduccionScreen;

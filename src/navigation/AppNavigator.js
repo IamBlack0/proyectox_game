@@ -61,7 +61,7 @@ function AppNavigator() {
                 <Stack.Screen name="Help" component={HelpScreen} />
                 <Stack.Screen name="Admin" component={AdminScreen} />
                 <Stack.Screen name="Personaje" component={PersonajeScreen} />
-                <Stack.Screen name="Introduccion" component={IntroduccionScreen} />
+                <Stack.Screen name="Introduccion" component={IntroduccionScreen} options={{ headerShown: false }} />
                 <Stack.Screen name="ModificarUsuarios" component={ModificarUsuariosScreen} />
                 <Stack.Screen name="ModificarDatosJuego" component={ModificarDatosJuegoScreen} />
             </Stack.Navigator>
