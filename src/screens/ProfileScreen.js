@@ -7,14 +7,15 @@ function ProfileScreen({ navigation }) {
     const [nombreUsuario, setNombreUsuario] = useState('');
     const [imgUrl, setImgUrl] = useState('');
     const [newImgUrl, setNewImgUrl] = useState('');
+    const API_URL = process.env.API_URL;
 
     useEffect(() => {
         const obtenerDatosUsuario = async () => {
             const user = await AsyncStorage.getItem('user');
             if (user) {
-                const { nombre_usuario, img_usuario } = JSON.parse(user);
-                setNombreUsuario(nombre_usuario);
-                setImgUrl(img_usuario || '');
+                const userObj = JSON.parse(user);
+                setNombreUsuario(userObj.nombre_usuario);
+                setImgUrl(userObj.img_usuario || '');
             }
         };
 
@@ -28,8 +29,16 @@ function ProfileScreen({ navigation }) {
 
     const handleUpdateImage = async () => {
         try {
-            const user = JSON.parse(await AsyncStorage.getItem('user'));
-            const response = await fetch(`http://192.168.0.3:8080/usuarios/${user.id_usuario}/imagen`, {
+            const user = await AsyncStorage.getItem('user');
+            if (!user) throw new Error('Usuario no encontrado');
+
+            const userObj = JSON.parse(user);
+
+            console.log('API_URL:', API_URL);
+            console.log('Usuario ID:', userObj.id_usuario);
+            console.log('Nueva URL de la imagen:', newImgUrl);
+
+            const response = await fetch(`${API_URL}/usuarios/${userObj.id_usuario}/imagen`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,17 +47,19 @@ function ProfileScreen({ navigation }) {
             });
 
             if (response.ok) {
-                const updatedUser = { ...user, img_usuario: newImgUrl };
+                const updatedUser = { ...userObj, img_usuario: newImgUrl };
                 await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
                 setImgUrl(newImgUrl);
                 Alert.alert('Imagen actualizada', 'Tu imagen de perfil ha sido actualizada.');
+                console.log('Imagen actualizada:', updatedUser);
             } else {
                 const errorData = await response.json();
                 Alert.alert('Error', errorData.error || 'Hubo un problema al actualizar la imagen.');
+                console.error('Error al actualizar la imagen:', errorData);
             }
         } catch (error) {
-            console.error(error);
-            Alert.alert('Error', 'Hubo un problema al actualizar la imagen.');
+            console.error('Error en handleUpdateImage:', error);
+            Alert.alert('Error', error.message || 'Hubo un problema al actualizar la imagen.');
         }
     };
 

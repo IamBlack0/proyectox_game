@@ -18,7 +18,7 @@ function PlayScreen() {
 
     const fetchPersonajes = async () => {
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/personajes/all`); // Usar la URL de la variable de entorno
+            const response = await fetch(`${API_URL}/personajes/all`);// Usar la URL de la variable de entorno
             if (response.ok) {
                 const data = await response.json();
                 setPersonajes(data);

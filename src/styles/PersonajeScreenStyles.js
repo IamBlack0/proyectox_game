@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'red',
     },
     buttonText: {
-        color: 'white',
+        color: 'black',
         fontSize: 16,
     },
     audioButton: {

@@ -10,6 +10,7 @@ const RegisterScreen = ({ navigation }) => {
     const [contrasena, setContrasena] = useState('');
     const [errors, setErrors] = useState({});
 
+
     const handleRegister = async () => {
         // Validación básica del correo electrónico
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

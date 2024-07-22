@@ -11,7 +11,7 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/login`, { // Usa la URL de la variable de entorno
+            const response = await fetch(`${API_URL}/usuarios/login`, { // Usa la URL de la variable de entorno
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

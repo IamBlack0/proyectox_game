@@ -11,14 +11,14 @@ const IntroduccionScreen = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const plataforma = Platform.OS === 'web' ? 'web' : 'movil'; // Determinar la plataforma actual
-
+    const API_URL = process.env.API_URL; // Corrección aquí
     useEffect(() => {
         fetchVideoData(route.params.personajeId, plataforma);
     }, []);
 
     const fetchVideoData = async (personajeId, plataforma) => {
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/personajes/${personajeId}/videos/${plataforma}`); // Usa la URL de la variable de entorno
+            const response = await fetch(`${API_URL}/personajes/${personajeId}/videos/${plataforma}`); // Usa la URL de la variable de entorno
             if (response.ok) {
                 const data = await response.json();
                 if (data.length > 0) {

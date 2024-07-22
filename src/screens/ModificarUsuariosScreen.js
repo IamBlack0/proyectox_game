@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TextInput, Button, ScrollView, Platform } from 'react-native';
-import Constants from 'expo-constants';
+import { View, Text, TextInput, Button, ScrollView, Platform, Modal, TouchableOpacity } from 'react-native';
 import styles from '../styles/ModificarUsuariosStyles';
 
 const ModificarUsuariosScreen = ({ navigation }) => {
@@ -11,19 +10,24 @@ const ModificarUsuariosScreen = ({ navigation }) => {
     const [contraUsuario, setContraUsuario] = useState('');
     const [rolUsuario, setRolUsuario] = useState('');
     const [imgUsuario, setImgUsuario] = useState('');
+    const [modalVisible, setModalVisible] = useState(false);
+    const [crearVisible, setCrearVisible] = useState(false);
+    const API_URL = process.env.API_URL;
+
+    const fetchUsuarios = async () => {
+        try {
+            const response = await fetch(`${API_URL}/usuarios`);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            setUsuarios(data);
+        } catch (error) {
+            console.error('Error fetching users:', error);
+        }
+    }
 
     useEffect(() => {
-        // Fetch all users from the API
-        const fetchUsuarios = async () => {
-            try {
-                const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios`);
-                const data = await response.json();
-                setUsuarios(data);
-            } catch (error) {
-                console.error('Error fetching users:', error);
-            }
-        };
-
         fetchUsuarios();
     }, []);
 
@@ -36,6 +40,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
             setContraUsuario(user.contra_usuario);
             setRolUsuario(user.rol_usuario.toString());
             setImgUsuario(user.img_usuario);
+            setModalVisible(true);
         }
     };
 
@@ -43,7 +48,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
         if (!selectedUser) return;
 
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/${selectedUser.id_usuario}`, {
+            const response = await fetch(`${API_URL}/usuarios/${selectedUser.id_usuario}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -60,14 +65,14 @@ const ModificarUsuariosScreen = ({ navigation }) => {
             const result = await response.json();
             if (response.ok) {
                 alert('Usuario actualizado con éxito');
-                // Optionally refresh user list or navigate away
+                setModalVisible(false);
                 setSelectedUser(null);
                 setNombreUsuario('');
                 setCorreoUsuario('');
                 setContraUsuario('');
                 setRolUsuario('');
                 setImgUsuario('');
-                fetchUsuarios(); // Refresh the user list
+                fetchUsuarios();
             } else {
                 alert('Error al actualizar el usuario: ' + result.error);
             }
@@ -78,7 +83,7 @@ const ModificarUsuariosScreen = ({ navigation }) => {
 
     const handleCreateUser = async () => {
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/registrar`, {
+            const response = await fetch(`${API_URL}/usuarios/registrar`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -95,13 +100,14 @@ const ModificarUsuariosScreen = ({ navigation }) => {
             const result = await response.json();
             if (response.ok) {
                 alert('Usuario creado con éxito');
-                // Optionally refresh user list or navigate away
+                setCrearVisible(false);
+                setSelectedUser(null);
                 setNombreUsuario('');
                 setCorreoUsuario('');
                 setContraUsuario('');
                 setRolUsuario('');
                 setImgUsuario('');
-                fetchUsuarios(); // Refresh the user list
+                fetchUsuarios();
             } else {
                 alert('Error al crear el usuario: ' + result.error);
             }
@@ -112,22 +118,20 @@ const ModificarUsuariosScreen = ({ navigation }) => {
 
     const handleDeleteUser = async () => {
         if (!selectedUser) return;
-
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/usuarios/${selectedUser.id_usuario}`, {
+            const response = await fetch(`${API_URL}/usuarios/${selectedUser.id_usuario}`, {
                 method: 'DELETE',
             });
-
             if (response.ok) {
                 alert('Usuario eliminado con éxito');
-                // Optionally refresh user list or navigate away
+                setModalVisible(false);
                 setSelectedUser(null);
                 setNombreUsuario('');
                 setCorreoUsuario('');
                 setContraUsuario('');
                 setRolUsuario('');
                 setImgUsuario('');
-                fetchUsuarios(); // Refresh the user list
+                fetchUsuarios();
             } else {
                 const result = await response.json();
                 alert('Error al eliminar el usuario: ' + result.error);
@@ -141,82 +145,122 @@ const ModificarUsuariosScreen = ({ navigation }) => {
         <ScrollView contentContainerStyle={styles.container}>
             <Text style={styles.title}>Modificar Usuario</Text>
             {usuarios.map(user => (
-                <Button key={user.id_usuario} title={`Seleccionar ${user.nombre_usuario}`} onPress={() => handleSelectUser(user.id_usuario)} />
+                <Button key={user.id_usuario} title={`Seleccionar ${user.nombre_usuario}`}
+                        onPress={() => handleSelectUser(user.id_usuario)}/>
             ))}
             {selectedUser && (
-                <View style={styles.formContainer}>
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Nombre de Usuario"
-                        value={nombreUsuario}
-                        onChangeText={setNombreUsuario}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Correo Electrónico"
-                        value={correoUsuario}
-                        onChangeText={setCorreoUsuario}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Contraseña"
-                        value={contraUsuario}
-                        onChangeText={setContraUsuario}
-                        secureTextEntry
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Rol de Usuario"
-                        value={rolUsuario}
-                        onChangeText={setRolUsuario}
-                        keyboardType="numeric"
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Imagen de Usuario URL"
-                        value={imgUsuario}
-                        onChangeText={setImgUsuario}
-                    />
-                    <Button title="Actualizar Usuario" onPress={handleUpdateUser} />
-                    <Button title="Eliminar Usuario" onPress={handleDeleteUser} color="red" />
-                </View>
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={modalVisible}
+                    onRequestClose={() => {
+                        setModalVisible(!modalVisible);
+                        setSelectedUser(null);
+                        setNombreUsuario('');
+                        setCorreoUsuario('');
+                        setContraUsuario('');
+                        setRolUsuario('');
+                        setImgUsuario('');
+                    }}
+                >
+                    <View style={styles.modalView}>
+                        <TouchableOpacity style={styles.closeButton} onPress={() => setModalVisible(false)}>
+                            <Text style={styles.closeButtonText}>×</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.modalText}>Editar Usuario</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nombre de Usuario"
+                            value={nombreUsuario}
+                            onChangeText={setNombreUsuario}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Correo Electrónico"
+                            value={correoUsuario}
+                            onChangeText={setCorreoUsuario}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Contraseña"
+                            value={contraUsuario}
+                            onChangeText={setContraUsuario}
+                            secureTextEntry
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Rol de Usuario"
+                            value={rolUsuario}
+                            onChangeText={setRolUsuario}
+                            keyboardType="numeric"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Imagen de Usuario URL"
+                            value={imgUsuario}
+                            onChangeText={setImgUsuario}
+                        />
+                        <Button title="Actualizar Usuario" onPress={handleUpdateUser}/>
+                        <Button title="Eliminar Usuario" onPress={handleDeleteUser} color="red"/>
+                    </View>
+                </Modal>
             )}
-            <View style={styles.formContainer}>
-                <Text style={styles.title}>Crear Nuevo Usuario</Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Nombre de Usuario"
-                    value={nombreUsuario}
-                    onChangeText={setNombreUsuario}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Correo Electrónico"
-                    value={correoUsuario}
-                    onChangeText={setCorreoUsuario}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Contraseña"
-                    value={contraUsuario}
-                    onChangeText={setContraUsuario}
-                    secureTextEntry
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Rol de Usuario"
-                    value={rolUsuario}
-                    onChangeText={setRolUsuario}
-                    keyboardType="numeric"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Imagen de Usuario URL"
-                    value={imgUsuario}
-                    onChangeText={setImgUsuario}
-                />
-                <Button title="Crear Usuario" onPress={handleCreateUser} />
-            </View>
+            <Button title="Crear Nuevo Usuario" onPress={() => setCrearVisible(true)}/>
+            {crearVisible && (
+                <Modal
+                    animationType="slide"
+                    transparent={true}
+                    visible={crearVisible}
+                    onRequestClose={() => {
+                        setCrearVisible(!crearVisible);
+                        setNombreUsuario('');
+                        setCorreoUsuario('');
+                        setContraUsuario('');
+                        setRolUsuario('');
+                        setImgUsuario('');
+                    }}
+                >
+                    <View style={styles.modalView}>
+                        <TouchableOpacity style={styles.closeButton} onPress={() => setCrearVisible(false)}>
+                            <Text style={styles.closeButtonText}>×</Text>
+                        </TouchableOpacity>
+                        <Text style={styles.title}>Crear Nuevo Usuario</Text>
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Nombre de Usuario"
+                            value={nombreUsuario}
+                            onChangeText={setNombreUsuario}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Correo Electrónico"
+                            value={correoUsuario}
+                            onChangeText={setCorreoUsuario}
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Contraseña"
+                            value={contraUsuario}
+                            onChangeText={setContraUsuario}
+                            secureTextEntry
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Rol de Usuario"
+                            value={rolUsuario}
+                            onChangeText={setRolUsuario}
+                            keyboardType="numeric"
+                        />
+                        <TextInput
+                            style={styles.input}
+                            placeholder="Imagen de Usuario URL"
+                            value={imgUsuario}
+                            onChangeText={setImgUsuario}
+                        />
+                        <Button title="Crear Usuario" onPress={handleCreateUser}/>
+                    </View>
+                </Modal>
+            )}
         </ScrollView>
     );
 };

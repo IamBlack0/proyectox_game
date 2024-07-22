@@ -6,6 +6,7 @@ import Constants from 'expo-constants';
 import { useRoute, useNavigation } from '@react-navigation/native'; // Para obtener parámetros de la ruta y navegación
 import { Audio } from 'expo-av'; // Importar módulo para manejar audio
 
+
 const ErrorBoundary = ({ onError, FallbackComponent, children }) => {
     const [error, setError] = useState(null);
 
@@ -39,14 +40,15 @@ const PersonajeScreen = () => {
     const [showResult, setShowResult] = useState(false); // Estado para mostrar el resultado final
     const [selectedAnswer, setSelectedAnswer] = useState(null); // Para saber cuál respuesta fue seleccionada
     const [sound, setSound] = useState(null); // Para manejar el sonido
+    const API_URL = process.env.API_URL; // Corrección aquí
 
     useEffect(() => {
         const loadQuestionsAndAnswers = async () => {
             try {
-                const apiUrl = Constants.expoConfig.extra.apiUrl;
+
 
                 // Fetch preguntas
-                const preguntasResponse = await fetch(`${apiUrl}/preguntas/all`);
+                const preguntasResponse = await fetch(`${API_URL}/preguntas/all`);
                 if (!preguntasResponse.ok) {
                     throw new Error('Error al obtener preguntas: ' + preguntasResponse.statusText);
                 }
@@ -58,7 +60,7 @@ const PersonajeScreen = () => {
                 setPreguntas(filteredPreguntas);
 
                 // Fetch respuestas
-                const respuestasResponse = await fetch(`${apiUrl}/respuestas/all`);
+                const respuestasResponse = await fetch(`${API_URL}/respuestas/all`);
                 if (!respuestasResponse.ok) {
                     throw new Error('Error al obtener respuestas: ' + respuestasResponse.statusText);
                 }

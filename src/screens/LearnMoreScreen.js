@@ -14,6 +14,7 @@ function LearnMoreScreen({ navigation }) {
     const [personajes, setPersonajes] = useState([]);
     const [sound, setSound] = useState();
     const [isPlaying, setIsPlaying] = useState(false);
+    const API_URL = process.env.API_URL;// Corrección aquí
 
     useFocusEffect(
         React.useCallback(() => {
@@ -39,7 +40,7 @@ function LearnMoreScreen({ navigation }) {
 
     const fetchPersonajes = async () => {
         try {
-            const response = await fetch(`${Constants.expoConfig.extra.apiUrl}/personajes/all`); // Usa la URL de la variable de entorno
+            const response = await fetch(`${API_URL}/personajes/all`); // Usa la URL de la variable de entorno
             if (response.ok) {
                 const data = await response.json();
                 setPersonajes(data);
